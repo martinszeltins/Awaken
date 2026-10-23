@@ -6,6 +6,8 @@ You will see your startup applications, the background services that start with 
 
 Turn the switch off to stop something from starting next time. Turn it on to bring it back. Use **Add** to create a new startup application.
 
+![Screencast](screencast8245.mp4)
+
 ![Awaken showing startup applications](data/screenshots/main.png)
 
 ![Awaken showing Docker projects](data/screenshots/docker.png)
