@@ -1,0 +1,13 @@
+#!@PYTHON@
+import os
+import signal
+import sys
+
+signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+sys.path.insert(1, os.path.join("@pkgdatadir@"))
+
+from startup_applications.main import main
+
+if __name__ == "__main__":
+    sys.exit(main("@VERSION@"))

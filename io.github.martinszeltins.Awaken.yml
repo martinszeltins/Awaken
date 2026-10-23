@@ -1,0 +1,28 @@
+id: io.github.martinszeltins.Awaken
+runtime: org.gnome.Platform
+runtime-version: "51"
+sdk: org.gnome.Sdk
+command: awaken
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  - --filesystem=xdg-config/autostart
+  - --filesystem=host-etc:ro
+  - --filesystem=host-os:ro
+  - --talk-name=org.freedesktop.Flatpak
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /share/pkgconfig
+  - "*.la"
+  - "*.a"
+modules:
+  - name: awaken
+    buildsystem: meson
+    sources:
+      # Local builds use this directory. The Flathub submission must replace
+      # it with a git tag of https://github.com/martinszeltins/Awaken.
+      - type: dir
+        path: .

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>@APP_ID@</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>Awaken</name>
+  <summary>See which applications and services start with the computer</summary>
+  <developer id="io.github.martinszeltins">
+    <name>martinszeltins</name>
+  </developer>
+  <description>
+    <p>
+      Awaken lists what starts with the computer: autostart applications,
+      enabled systemd services, and Docker projects whose restart policy
+      brings them back when the Docker daemon starts.
+    </p>
+    <p>
+      Each entry shows where it is configured and which command it runs.
+      Desktop entries can be switched off or added. Systemd services can be
+      enabled or disabled.
+    </p>
+  </description>
+  <launchable type="desktop-id">@APP_ID@.desktop</launchable>
+  <url type="homepage">https://github.com/martinszeltins/Awaken</url>
+  <url type="vcs-browser">https://github.com/martinszeltins/Awaken</url>
+  <url type="bugtracker">https://github.com/martinszeltins/Awaken/issues</url>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="1.0.0" date="2026-10-23">
+      <description>
+        <p>First release of Awaken.</p>
+      </description>
+    </release>
+  </releases>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/martinszeltins/Awaken/v1.0.0/data/screenshots/main.png</image>
+      <caption>Autostart applications and services</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/martinszeltins/Awaken/v1.0.0/data/screenshots/docker.png</image>
+      <caption>Docker projects that start with the computer</caption>
+    </screenshot>
+  </screenshots>
+</component>

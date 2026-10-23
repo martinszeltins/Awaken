@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Awaken
+Comment=See which applications and services start with the computer
+Exec=@BINDIR@/awaken
+Icon=@APP_ID@
+Terminal=false
+Type=Application
+Categories=System;Settings;
+Keywords=autostart;systemd;startup;boot;docker;
+StartupNotify=true
