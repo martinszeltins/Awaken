@@ -12,6 +12,7 @@ gi.require_version("GioUnix", "2.0")
 
 from gi.repository import Adw, Gdk, Gio, GioUnix, GLib, GObject, Gtk, Pango
 
+from .const import APP_ID
 from .scanner import (
     GROUP_DOCKER,
     GROUP_SYSTEMD_USER,
@@ -36,13 +37,23 @@ from .scanner import (
 
 _FALLBACK_ICON = "application-x-executable-symbolic"
 _GENERIC_PROGRAMS = {"sh", "bash", "dash", "env", "true", "false", "dbus-send"}
+_DEFAULT_WINDOW_WIDTH = 800
+_DEFAULT_WINDOW_HEIGHT = 680
+_TILED_STATE = (
+    Gdk.ToplevelState.TILED
+    | Gdk.ToplevelState.TOP_TILED
+    | Gdk.ToplevelState.BOTTOM_TILED
+    | Gdk.ToplevelState.LEFT_TILED
+    | Gdk.ToplevelState.RIGHT_TILED
+)
 
 
 class StartupWindow(Adw.ApplicationWindow):
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.set_title("Awaken")
-        self.set_default_size(800, 680)
+        self._settings: Gio.Settings | None = None
+        self._restore_window_state()
         self._result: ScanResult | None = None
         self._content: Adw.PreferencesPage | None = None
         self._scanning = False
@@ -148,8 +159,44 @@ class StartupWindow(Adw.ApplicationWindow):
         action.connect("activate", callback)
         self.add_action(action)
 
+    def _restore_window_state(self) -> None:
+        source = Gio.SettingsSchemaSource.get_default()
+        schema = source.lookup(APP_ID, True) if source is not None else None
+        if schema is None:
+            self.set_default_size(_DEFAULT_WINDOW_WIDTH, _DEFAULT_WINDOW_HEIGHT)
+            return
+        self._settings = Gio.Settings.new(APP_ID)
+        self.set_default_size(
+            self._settings.get_int("window-width"),
+            self._settings.get_int("window-height"),
+        )
+        if self._settings.get_boolean("window-maximized"):
+            self.maximize()
+
+    def _save_window_state(self) -> None:
+        settings = self._settings
+        if settings is None:
+            return
+        settings.set_boolean("window-maximized", self.is_maximized())
+        if self._should_save_size():
+            width = self.get_width()
+            height = self.get_height()
+            if width > 0 and height > 0:
+                settings.set_int("window-width", width)
+                settings.set_int("window-height", height)
+        Gio.Settings.sync()
+
+    def _should_save_size(self) -> bool:
+        if self.is_maximized() or self.is_fullscreen():
+            return False
+        surface = self.get_surface()
+        if not isinstance(surface, Gdk.Toplevel):
+            return False
+        return not bool(surface.get_state() & _TILED_STATE)
+
     def _on_close(self, *_args) -> bool:
         self._closed = True
+        self._save_window_state()
         return False
 
     def _on_add(self, *_args) -> None:

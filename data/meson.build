@@ -30,3 +30,12 @@ install_data(
   'icons/hicolor/symbolic/apps/io.github.martinszeltins.Awaken-symbolic.svg',
   install_dir: get_option('datadir') / 'icons' / 'hicolor' / 'symbolic' / 'apps',
 )
+
+install_data(
+  'io.github.martinszeltins.Awaken.gschema.xml',
+  install_dir: get_option('datadir') / 'glib-2.0' / 'schemas',
+)
+
+gnome.compile_schemas(
+  depend_files: files('io.github.martinszeltins.Awaken.gschema.xml'),
+)
